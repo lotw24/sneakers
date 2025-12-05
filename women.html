@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneakers Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    :root { --orange: #f97316; }
+
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      transition: color .22s ease, transform .18s ease;
+      cursor: pointer;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0%;
+      height: 3px;
+      background: var(--orange);
+      transition: width .25s ease;
+      border-radius: 2px;
+    }
+
+    .nav-link:hover {
+      color: var(--orange);
+      transform: scale(1.08);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: #000;
+      transform: scale(1.02);
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      width: 100%;
+    }
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: #fff;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+      transition: left 0.3s ease;
+      z-index: 100;
+      padding-top: 6rem;
+    }
+
+  
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0 1.5rem;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 1rem;
+        position: relative;
+      display: inline-block;
+      transition: color .22s ease, transform .18s ease;
+      cursor: pointer;
+    }
+
+    .sidebar ul li :hover {
+      color: var(--orange);
+      transform: scale(1.08);
+    }
+
+    .sidebar ul li :hover::after {
+      width: 100%;
+    }
+
+    .sidebar.active{
+      left: 0;
+    }
+
+    .sidebar.active::after {
+      width: 100%;
+    }
+
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 90;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Overlay -->
+  <div id="overlay" class="overlay"></div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <ul class="font-medium text-gray-70 flex flex-col gap-6 items-center">
+      <li class="nav-link"><a href="index.html">New Arrivals</a></li>
+      <li class="nav-link"><a href="men.html">Men</a></li>
+      <li class="nav-link"><a href="women.html">Women</a></li>
+      <li class="nav-link"><a href="about.html">About</a></li>
+      <li class="nav-link">Contact</li>
+    </ul>
+  </div>
+
+ <!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+  <ul class="font-medium text-gray-700 flex flex-col gap-6 items-start pl-6">
+    <li class="nav-link"><a href="index.html">New Arrivals</a></li>
+    <li class="nav-link"><a href="men.html">Men</a></li>
+    <li class="nav-link"><a href="women.html">Women</a></li>
+    <li class="nav-link"><a href="about.html">About</a></li>
+    <li class="nav-link">Contact</li>
+  </ul>
+</div>
+
+<!-- Navbar -->
+<nav class="fixed top-0 left-0 w-full bg-white py-4 px-6 md:px-10 border-b z-50 flex justify-between items-center">
+  <div class="flex items-center gap-3">
+    <!-- Hamburger Button -->
+    <button id="menu-btn" class="text-3xl text-gray-700 md:hidden focus:outline-none">
+      &#9776;
+    </button>
+
+    <!-- Logo -->
+    <img src="images/logo.svg" alt="Store Logo" class="h-6">
+  </div>
+
+  <!-- Desktop Navigation Links -->
+  <ul class="hidden md:flex justify-center items-center text-gray-500 space-x-8 font-medium">
+    <li class="nav-link"><a href="index.html">New Arrivals</a></li>
+    <li class="nav-link"><a href="men.html">Men</a></li>
+    <li class="nav-link"><a href="women.html">Women</a></li>
+    <li class="nav-link"><a href="about.html">About</a></li>
+    <li class="nav-link"><a href="#">Contact</a></li>
+  </ul>
+
+  <!-- Cart and Profile Icons -->
+  <div class="flex items-center space-x-4">
+    <div class="relative">
+      <button id="cart-btn" aria-label="View cart">
+        <img src="images/icon-cart.svg" alt="Cart Icon" class="w-5 h-5">
+      </button>
+      <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden">0</span>
+    </div>
+    <div class="relative">
+      <button id="profile-btn" aria-label="Profile menu">
+        <img src="images/image-avatar.png" alt="User avatar" class="h-8 w-8 md:h-10 md:w-10 rounded-full border border-orange-500">
+      </button>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Sneakers Section -->
+  <section class="flex justify-center px-4 py-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl">
+
+      <!-- Sneaker 1 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvtxAwy2WTyi_plDC_LhUH7ZtXrJ97M9PfHw&s" alt="Ladies Lace-Up Ankara Sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Ladies Lace-Up Ankara Sneakers</p>
+        <p class="text-gray-600 text-sm">Lightweight sneakers built for comfort and speed.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$129.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Sneaker 2 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjIB27V_g6tZbLhL-W4vCupBxFPKvv6Sar9g&s" alt="Women's New Balance Roav V1 sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">NEW BALANCE</p>
+        <p class="text-gray-600 text-sm">Women's New Balance Roav V1 sneakers</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$139.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Sneaker 3 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8-kpUHlQgV8IqhHmwkLAADDsg8-50D67ZYw&s" alt="Cloudpulse gym shoes" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Cloudpulse</p>
+        <p class="text-gray-600 text-sm">Gym shoe for stability, control and responsiveness</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$119.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Sneaker 4 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS-bgMeXl-6UWRa-uRNvduhNh4wFh2ZZcPJA&s" alt="Gola Classics Women's Daytona Sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Gola Classics Women's Daytona Sneakers</p>
+        <p class="text-gray-600 text-sm">Classic sneakers that never go out of style.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>   
+      
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSewblcTskIinYC3D5ibDC7fjMpH9qRfe7Mg&s" alt="Women's Light Weight Sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Women's Light Weight Sneakers</p>
+        <p class="text-gray-600 text-sm">Classic sneakers that never go out of style.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>   
+
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtaeVui96IKUM8bjuTV6sA9z9cEZktJxCGFg&s" alt="Ladies Latest Sneaker Sporty 191 Black" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Ladies Latest Sneaker Sporty 191 Black</p>
+        <p class="text-gray-600 text-sm">Classic sneakers that never go out of style.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>   
+
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNdzQcKxAbymHGJwEJUp_TalpU8_0b_9VzXg&s" alt="Ladies Trendy Sneakers With Touch Of Pink" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Ladies Trendy Sneakers With Touch Of Pink</p>
+        <p class="text-gray-600 text-sm">Classic sneakers that never go out of style.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Quantity Modal -->
+  <div id="quantity-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-80 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4 text-center">Add to Cart</h2>
+      <p id="selected-product" class="text-gray-700 text-center mb-2"></p>
+      <p id="selected-price" class="text-gray-600 text-center mb-4"></p>
+      
+      <div class="flex justify-between items-center mb-4">
+        <label for="quantity-input" class="font-medium text-gray-700">Quantity:</label>
+        <input type="number" id="quantity-input" min="1" max="99" value="1" class="border rounded-lg w-20 text-center py-1">
+      </div>
+
+      <p class="text-center text-gray-800 font-semibold mb-4">
+        Total: $<span id="total-price">0.00</span>
+      </p>
+
+      <div class="flex justify-between gap-2">
+        <button id="cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg flex-1">Cancel</button>
+        <button id="confirm-btn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex-1">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Dropdown -->
+  <div id="cart-dropdown" class="hidden fixed right-6 top-20 bg-white border rounded-xl shadow-lg w-80 p-4 z-50">
+    <h3 class="font-semibold text-gray-800 mb-3">Your Cart</h3>
+    <div id="cart-items" class="max-h-60 overflow-y-auto text-sm text-gray-700">
+      <p class="text-gray-500 text-center py-4">Your cart is empty</p>
+    </div>
+    <hr class="my-3">
+    <div class="flex justify-between items-center mb-3">
+      <span class="font-semibold">Total:</span>
+      <span id="cart-total" class="font-bold">$0.00</span>
+    </div>
+    <button id="checkout-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>Checkout</button>
+  </div>
+
+  <script>
+      // Sidebar toggle
+    const menuBtn = document.getElementById("menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
+
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    const cartBtn = document.getElementById('cart-btn');
+    const cartDropdown = document.getElementById('cart-dropdown');
+    const quantityModal = document.getElementById('quantity-modal');
+    const selectedProduct = document.getElementById('selected-product');
+    const selectedPrice = document.getElementById('selected-price');
+    const totalPrice = document.getElementById('total-price');
+    const quantityInput = document.getElementById('quantity-input');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const cartCount = document.getElementById('cart-count');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    let currentProduct = {};
+    let cart = [];
+
+    // Open modal on Add to Cart click
+    addToCartButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const card = e.target.closest('.flex.flex-col');
+        const name = card.querySelector('p.font-semibold').innerText;
+        const priceText = card.querySelector('.text-orange-500').innerText.replace('$', '');
+        const price = parseFloat(priceText);
+
+        currentProduct = { name, price };
+        selectedProduct.innerText = name;
+        selectedPrice.innerText = `Price: $${price.toFixed(2)}`;
+        quantityInput.value = 1;
+        totalPrice.innerText = price.toFixed(2);
+        quantityModal.classList.remove('hidden');
+        quantityModal.classList.add('flex');
+      });
+    });
+
+    // Update total price when quantity changes
+    quantityInput.addEventListener('input', () => {
+      let qty = parseInt(quantityInput.value);
+      if (qty < 1) {
+        qty = 1;
+        quantityInput.value = 1;
+      }
+      totalPrice.innerText = (currentProduct.price * qty).toFixed(2);
+    });
+
+    // Cancel modal
+    cancelBtn.addEventListener('click', () => {
+      quantityModal.classList.add('hidden');
+      quantityModal.classList.remove('flex');
+    });
+
+    // Close modal on backdrop click
+    quantityModal.addEventListener('click', (e) => {
+      if (e.target === quantityModal) {
+        quantityModal.classList.add('hidden');
+        quantityModal.classList.remove('flex');
+      }
+    });
+
+    // Confirm add to cart
+    confirmBtn.addEventListener('click', () => {
+      const qty = parseInt(quantityInput.value) || 1;
+      const total = currentProduct.price * qty;
+
+      const existing = cart.find(item => item.name === currentProduct.name);
+      if (existing) {
+        existing.quantity += qty;
+        existing.total += total;
+      } else {
+        cart.push({ ...currentProduct, quantity: qty, total });
+      }
+
+      updateCart();
+      quantityModal.classList.add('hidden');
+      quantityModal.classList.remove('flex');
+    });
+
+    // Toggle cart dropdown
+    cartBtn.addEventListener('click', () => {
+      cartDropdown.classList.toggle('hidden');
+    });
+
+    // Close cart when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!cartBtn.contains(e.target) && !cartDropdown.contains(e.target)) {
+        cartDropdown.classList.add('hidden');
+      }
+    });
+
+    // Update cart display
+    function updateCart() {
+      cartItemsContainer.innerHTML = '';
+      let totalSum = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Your cart is empty</p>';
+        cartCount.classList.add('hidden');
+        checkoutBtn.disabled = true;
+      } else {
+        cart.forEach((item, index) => {
+          totalSum += item.total;
+
+          const div = document.createElement('div');
+          div.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'pb-2', 'border-b');
+          div.innerHTML = `
+            <div class="flex-1">
+              <p class="font-medium text-sm">${item.name}</p>
+              <p class="text-xs text-gray-600">${item.quantity} × ${item.price.toFixed(2)}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="font-semibold text-sm">${item.total.toFixed(2)}</span>
+              <button class="group remove-btn bg-red-50 hover:bg-red-100 rounded-full w-6 h-6 flex items-center justify-center transition-all duration-200" data-index="${index}">
+                <svg class="w-3 h-3 text-red-500 group-hover:text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          `;
+          cartItemsContainer.appendChild(div);
+        });
+
+        // Remove button functionality
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = parseInt(e.currentTarget.getAttribute('data-index'));
+            cart.splice(index, 1);
+            updateCart();
+          });
+        });
+
+        cartCount.innerText = cart.length;
+        cartCount.classList.remove('hidden');
+        checkoutBtn.disabled = false;
+      }
+      cartTotal.innerText = `${totalSum.toFixed(2)}`;
+    }
+
+    // Checkout functionality
+    checkoutBtn.addEventListener('click', () => {
+      if (cart.length > 0) {
+        alert(`Checkout successful! Total: ${cartTotal.innerText}`);
+        cart = [];
+        updateCart();
+        cartDropdown.classList.add('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>

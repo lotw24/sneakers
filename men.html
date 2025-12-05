@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sneakers Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    :root { --orange: #f97316; }
+
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      transition: color .22s ease, transform .18s ease;
+      cursor: pointer;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0%;
+      height: 3px;
+      background: var(--orange);
+      transition: width .25s ease;
+      border-radius: 2px;
+    }
+
+    .nav-link:hover {
+      color: var(--orange);
+      transform: scale(1.08);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: #000;
+      transform: scale(1.02);
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      width: 100%;
+    }
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 250px;
+      height: 100%;
+      background-color: #fff;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+      transition: left 0.3s ease;
+      z-index: 100;
+      padding-top: 6rem;
+    }
+
+  
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0 1.5rem;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 1rem;
+        position: relative;
+      display: inline-block;
+      transition: color .22s ease, transform .18s ease;
+      cursor: pointer;
+    }
+
+    .sidebar ul li :hover {
+      color: var(--orange);
+      transform: scale(1.08);
+    }
+
+    .sidebar ul li :hover::after {
+      width: 100%;
+    }
+
+    .sidebar.active{
+       color: #000;
+      transform: scale(1.02);
+      font-weight: 700;
+      left: 0;
+    }
+
+    .sidebar.active::after {
+      width: 100%;
+    }
+
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 90;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Overlay -->
+  <div id="overlay" class="overlay"></div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <ul class="font-medium text-gray-70 flex flex-col gap-6 items-center">
+      <li class="nav-link"><a href="index.html">New Arrivals</a></li>
+      <li class="nav-link"><a href="men.html">Men</a></li>
+      <li class="nav-link"><a href="women.html">Women</a></li>
+      <li class="nav-link">About</li>
+      <li class="nav-link">Contact</li>
+    </ul>
+  </div>
+
+  <!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+  <ul class="font-medium text-gray-700 flex flex-col gap-6 items-start pl-6">
+    <li class="nav-link"><a href="index.html">New Arrivals</a></li>
+    <li class="nav-link"><a href="men.html">Men</a></li>
+    <li class="nav-link"><a href="women.html">Women</a></li>
+    <li class="nav-link"><a href="about.html">About</a></li>
+    <li class="nav-link">Contact</li>
+  </ul>
+</div>
+
+<!-- Navbar -->
+<nav class="fixed top-0 left-0 w-full bg-white py-4 px-6 md:px-10 border-b z-50 flex justify-between items-center">
+  <div class="flex items-center gap-3">
+    <!-- Hamburger Button -->
+    <button id="menu-btn" class="text-3xl text-gray-700 md:hidden focus:outline-none">
+      &#9776;
+    </button>
+
+    <!-- Logo -->
+    <img src="images/logo.svg" alt="Store Logo" class="h-6">
+  </div>
+
+  <!-- Desktop Navigation Links -->
+  <ul class="hidden md:flex justify-center items-center text-gray-500 space-x-8 font-medium">
+    <li class="nav-link"><a href="index.html">New Arrivals</a></li>
+    <li class="nav-link"><a href="men.html">Men</a></li>
+    <li class="nav-link"><a href="women.html">Women</a></li>
+    <li class="nav-link"><a href="about.html">About</a></li>
+    <li class="nav-link"><a href="#">Contact</a></li>
+  </ul>
+
+  <!-- Cart and Profile Icons -->
+  <div class="flex items-center space-x-4">
+    <div class="relative">
+      <button id="cart-btn" aria-label="View cart">
+        <img src="images/icon-cart.svg" alt="Cart Icon" class="w-5 h-5">
+      </button>
+      <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full hidden">0</span>
+    </div>
+    <div class="relative">
+      <button id="profile-btn" aria-label="Profile menu">
+        <img src="images/image-avatar.png" alt="User avatar" class="h-8 w-8 md:h-10 md:w-10 rounded-full border border-orange-500">
+      </button>
+    </div>
+  </div>
+</nav>
+
+  <!-- Sneakers Section -->
+  <section class="flex justify-center px-4 py-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl">
+
+      <!-- Sneaker 1 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSG2l3cu6qszxK4-lD_elufBk06HW92Y0lgaw&s" alt="Ladies Lace-Up Ankara Sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Philipp Plein</p>
+        <p class="text-gray-600 text-sm">New Predator Sneakers PP Hexagon</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$129.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Sneaker 2 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP7IuOVPkU4JZpg7idw5wdXZGaD0FUEYy48w&s" alt="Women's New Balance Roav V1 sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Men's Nike </p>
+        <p class="text-gray-600 text-sm">Men's Nike Air Max Alpha Trainer 6 Training Shoes</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$139.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Sneaker 3 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="data:image/jpeg;base64,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" alt="Cloudpulse gym shoes" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Sports ABU</p>
+        <p class="text-gray-600 text-sm">Gray Mesh,Cotton Fabric High Quality New Men Rubber Shoes Walking Wear Sneakers</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$119.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+      <!-- Sneaker 4 -->
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5W_z4uMd11LgkReFxCXf9XQFqGqJKkTkxJA&s" alt="Gola Classics Women's Daytona Sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Eloise Black Gray Fabric Italian Leather Sneakers</p>
+        <p class="text-gray-600 text-sm">Classic sneakers that never go out of style.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>   
+      
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBzGe2QuBcA3fwGfp2IRieJApAIWHZtQ6NWw&s" alt="Women's Light Weight Sneakers" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">On Cloud Tilt</p>
+        <p class="text-gray-600 text-sm">Lightweight sneakers built for comfort and speed</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>   
+
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYd_Ipbz3_VfDYFXBq4VNZjNiFRRbCIgB30Q&s" alt="Ladies Latest Sneaker Sporty 191 Black" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Nike Air Max 270</p>
+        <p class="text-gray-600 text-sm">Classic sneakers that never go out of style.</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>   
+
+      <div class="flex flex-col gap-4 px-6 py-6 bg-white rounded-3xl shadow-xl">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA8rN9f8oHxrq90208GTX1MrXYV2rv_H_Erg&s" alt="Ladies Trendy Sneakers With Touch Of Pink" class="w-full h-64 object-cover rounded-2xl">
+        <p class="font-semibold">Velocity Nitro™  4</p>
+        <p class="text-gray-600 text-sm">Men's Road Running Shoes</p>
+        <div class="flex justify-between items-center pt-2">
+          <p class="text-orange-500 font-semibold text-md">$89.99</p>
+          <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-4 py-2 text-sm font-medium">Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Quantity Modal -->
+  <div id="quantity-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-80 shadow-lg">
+      <h2 class="text-lg font-semibold mb-4 text-center">Add to Cart</h2>
+      <p id="selected-product" class="text-gray-700 text-center mb-2"></p>
+      <p id="selected-price" class="text-gray-600 text-center mb-4"></p>
+      
+      <div class="flex justify-between items-center mb-4">
+        <label for="quantity-input" class="font-medium text-gray-700">Quantity:</label>
+        <input type="number" id="quantity-input" min="1" max="99" value="1" class="border rounded-lg w-20 text-center py-1">
+      </div>
+
+      <p class="text-center text-gray-800 font-semibold mb-4">
+        Total: $<span id="total-price">0.00</span>
+      </p>
+
+      <div class="flex justify-between gap-2">
+        <button id="cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg flex-1">Cancel</button>
+        <button id="confirm-btn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex-1">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Dropdown -->
+  <div id="cart-dropdown" class="hidden fixed right-6 top-20 bg-white border rounded-xl shadow-lg w-80 p-4 z-50">
+    <h3 class="font-semibold text-gray-800 mb-3">Your Cart</h3>
+    <div id="cart-items" class="max-h-60 overflow-y-auto text-sm text-gray-700">
+      <p class="text-gray-500 text-center py-4">Your cart is empty</p>
+    </div>
+    <hr class="my-3">
+    <div class="flex justify-between items-center mb-3">
+      <span class="font-semibold">Total:</span>
+      <span id="cart-total" class="font-bold">$0.00</span>
+    </div>
+    <button id="checkout-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>Checkout</button>
+  </div>
+
+  <script>
+      // Sidebar toggle
+    const menuBtn = document.getElementById("menu-btn");
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    });
+
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+    });
+
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    const cartBtn = document.getElementById('cart-btn');
+    const cartDropdown = document.getElementById('cart-dropdown');
+    const quantityModal = document.getElementById('quantity-modal');
+    const selectedProduct = document.getElementById('selected-product');
+    const selectedPrice = document.getElementById('selected-price');
+    const totalPrice = document.getElementById('total-price');
+    const quantityInput = document.getElementById('quantity-input');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
+    const cartCount = document.getElementById('cart-count');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    let currentProduct = {};
+    let cart = [];
+
+    // Open modal on Add to Cart click
+    addToCartButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const card = e.target.closest('.flex.flex-col');
+        const name = card.querySelector('p.font-semibold').innerText;
+        const priceText = card.querySelector('.text-orange-500').innerText.replace('$', '');
+        const price = parseFloat(priceText);
+
+        currentProduct = { name, price };
+        selectedProduct.innerText = name;
+        selectedPrice.innerText = `Price: $${price.toFixed(2)}`;
+        quantityInput.value = 1;
+        totalPrice.innerText = price.toFixed(2);
+        quantityModal.classList.remove('hidden');
+        quantityModal.classList.add('flex');
+      });
+    });
+
+    // Update total price when quantity changes
+    quantityInput.addEventListener('input', () => {
+      let qty = parseInt(quantityInput.value);
+      if (qty < 1) {
+        qty = 1;
+        quantityInput.value = 1;
+      }
+      totalPrice.innerText = (currentProduct.price * qty).toFixed(2);
+    });
+
+    // Cancel modal
+    cancelBtn.addEventListener('click', () => {
+      quantityModal.classList.add('hidden');
+      quantityModal.classList.remove('flex');
+    });
+
+    // Close modal on backdrop click
+    quantityModal.addEventListener('click', (e) => {
+      if (e.target === quantityModal) {
+        quantityModal.classList.add('hidden');
+        quantityModal.classList.remove('flex');
+      }
+    });
+
+    // Confirm add to cart
+    confirmBtn.addEventListener('click', () => {
+      const qty = parseInt(quantityInput.value) || 1;
+      const total = currentProduct.price * qty;
+
+      const existing = cart.find(item => item.name === currentProduct.name);
+      if (existing) {
+        existing.quantity += qty;
+        existing.total += total;
+      } else {
+        cart.push({ ...currentProduct, quantity: qty, total });
+      }
+
+      updateCart();
+      quantityModal.classList.add('hidden');
+      quantityModal.classList.remove('flex');
+    });
+
+    // Toggle cart dropdown
+    cartBtn.addEventListener('click', () => {
+      cartDropdown.classList.toggle('hidden');
+    });
+
+    // Close cart when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!cartBtn.contains(e.target) && !cartDropdown.contains(e.target)) {
+        cartDropdown.classList.add('hidden');
+      }
+    });
+
+    // Update cart display
+    function updateCart() {
+      cartItemsContainer.innerHTML = '';
+      let totalSum = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Your cart is empty</p>';
+        cartCount.classList.add('hidden');
+        checkoutBtn.disabled = true;
+      } else {
+        cart.forEach((item, index) => {
+          totalSum += item.total;
+
+          const div = document.createElement('div');
+          div.classList.add('flex', 'justify-between', 'items-center', 'mb-2', 'pb-2', 'border-b');
+          div.innerHTML = `
+            <div class="flex-1">
+              <p class="font-medium text-sm">${item.name}</p>
+              <p class="text-xs text-gray-600">${item.quantity} × ${item.price.toFixed(2)}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="font-semibold text-sm">${item.total.toFixed(2)}</span>
+              <button class="group remove-btn bg-red-50 hover:bg-red-100 rounded-full w-6 h-6 flex items-center justify-center transition-all duration-200" data-index="${index}">
+                <svg class="w-3 h-3 text-red-500 group-hover:text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          `;
+          cartItemsContainer.appendChild(div);
+        });
+
+        // Remove button functionality
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const index = parseInt(e.currentTarget.getAttribute('data-index'));
+            cart.splice(index, 1);
+            updateCart();
+          });
+        });
+
+        cartCount.innerText = cart.length;
+        cartCount.classList.remove('hidden');
+        checkoutBtn.disabled = false;
+      }
+      cartTotal.innerText = `${totalSum.toFixed(2)}`;
+    }
+
+    // Checkout functionality
+    checkoutBtn.addEventListener('click', () => {
+      if (cart.length > 0) {
+        alert(`Checkout successful! Total: ${cartTotal.innerText}`);
+        cart = [];
+        updateCart();
+        cartDropdown.classList.add('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>
